@@ -1,37 +1,40 @@
-import React, {Component} from 'react'
+import React, {useState} from 'react'
 import shortid from 'shortid'
 
-export class TodoForm extends Component {
+/*
+Converting to hooks:
+1. convert from class to functional component
+2. Remove the render
+3. Import useState - useEffect is only for fetching
+4. change initial state with useState
+5. Change functions into const
+6. Remove the 'this' and 'state' when being called
+7. Replace setState with setText
+*/
 
-    state = {
-        text: ''
+const TodoForm =({addTodo}) => {
+    const [text, setText] = useState('')
+
+    const handleChange = event => {
+        setText(event.target.value)
     }
 
-    handleChange = event => {
-        const {name, value} = event.target
-        this.setState({
-            [name]:value
-        })
-    }
-
-    handleSubmit = event => {
+    const handleSubmit = event => {
         event.preventDefault()
-        this.props.addTodo({
+        addTodo({
             id: shortid.generate(),
-            text:this.state.text,
+            text:text,
             //mateen named this wrong
             compete: false
         })
     }
 
-    render(){
-        return(
-            <form onSubmit={this.handleSubmit}>
-                <input name='text' value={this.state.text} onChange={this.handleChange} placeholder='todo...'/>
-                <button>Add To-Do</button>
-            </form>
-        )
-    }
+    return(
+        <form onSubmit={handleSubmit}>
+            <input name='text' value={text} onChange={handleChange} placeholder='todo...'/>
+            <button>Add To-Do</button>
+        </form>
+    )
 }
 
 export default TodoForm
